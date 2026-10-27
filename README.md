@@ -183,4 +183,6 @@ python tools/resize_photos.py photos out --recursive --box 600x800
 
 ## License
 
-License: TBD
+GPL-3.0（见 [LICENSE](LICENSE)）。
+
+本项目静态链接 [FBInk](https://github.com/NiLuJe/FBInk)（GPL-3.0），依其条款，本项目整体以 GPL-3.0 分发。
