@@ -292,9 +292,11 @@ extensions/photo_plugins/
 ├── config/photo-player.conf
 ├── test/
 │   ├── host/                  # 宿主机单元测试（config/调度/洗牌/目录扫描）
+│   ├── server/                # 服务端协议测试（test_photo_server.py，纯 Python）
 │   └── device/                # 真机手工测试清单与脚本
 ├── tools/
-│   └── mock_photo_server.py   # 开发用最小 HTTP 图片服务（实现 ?count=1 / ?index=N 协议）
+│   ├── photo_server.py        # §6.3 协议的服务端参考实现（纯 Python 标准库）
+│   └── resize_photos.py       # PC 端批量预缩放/灰度/预抖动工具
 └── photo_plugins-release/     # make package 产物
 ```
 
@@ -310,12 +312,13 @@ extensions/photo_plugins/
 | `source_local` | 扫描过滤、顺序回绕、洗牌一轮不重复、空目录/全坏文件行为 |
 | `player` | 节拍不漂移（mock clock）、quit 标志中断睡眠 |
 | `source_http` | 重试/退避逻辑（mock wget 脚本）、失败计数复位 |
+| `photo_server`（tools/photo_server.py，Python） | §6.3 服务端协议：count/index、越界 404、非法 index 400、扩展名→ctype 映射与过滤、中文文件名、目录增删计数（`python3 test/server/test_photo_server.py`，独立于 make host-test） |
 
 ### 12.2 交叉编译验证（无设备也可做）
 
 - `make check-abi`：glibc 符号版本 ≤ 目标固件；
 - `file`/`readelf` 核对 ELF 架构（ARM32、hf/softfp 与工具链选择一致）；
-- 与 `tools/mock_photo_server.py` 联跑（qemu-user 或真机均可）。
+- 与 `tools/photo_server.py` 联跑（qemu-user 或真机均可）。
 
 ### 12.3 真机手工测试清单（`test/device/DEVICE_CHECKLIST.md`）
 
@@ -349,7 +352,7 @@ extensions/photo_plugins/
 |------|------|------|
 | M1 | 骨架 + 配置 + local 源 + 顺序播放 + 全屏显示 + 启停/清理 | 真机本地顺序轮播可用，退出干净 |
 | M2 | 随机播放 + 间隔/fit/flash 配置 + 防休眠 + `--no-framework` | §12.3-1~6 通过 |
-| M3 | http 源 + mock server + 重试退避 | §12.3-3 通过 |
+| M3 | http 源 + photo_server + 重试退避 | §12.3-3 通过 |
 | M4 | 单测补齐 + check-abi + package + README | `make host-test` 全绿，KUAL 包可拷贝即用 |
 
 ---

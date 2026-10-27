@@ -99,6 +99,16 @@ make install KINDLE_IP=192.168.x.x
 
 本地菜单读取 `/mnt/us/photos` 目录；网络菜单的 URL 是占位符，部署前须替换 `REPLACE_ME`。也可用 `bin/photo-player.sh --stop` 停止、`--debug` 前台调试、`--selftest` 自检。
 
+### 网络相册（PC 端服务）
+
+PC 端起图片服务（Python 3.8+ 标准库，无第三方依赖）：
+
+```sh
+python3 tools/photo_server.py --dir photos --port 8080
+```
+
+KUAL 菜单「启动相册-网络」把 URL 写成 `http://<PC-IP>:8080/photo` 即可；服务端忽略 URL 路径、只认 query 参数（`/photo` 换成任意路径都行）。协议为 `?count=1` 取总数、`?index=N` 取第 N 张（0 基），按文件名字节序排序、每次请求实时扫描目录，照片增删即时生效。
+
 ### 退出方式
 
 - 轻触屏幕（默认开，`--no-touch-exit` 关闭）
@@ -165,7 +175,7 @@ python tools/resize_photos.py photos out --recursive --box 600x800
 
 ## 已知限制
 
-- 网络源为 M3 里程碑占位：`menu.json` 中 URL 需替换 `REPLACE_ME` 才可用
+- 网络相册：服务端已提供（`tools/photo_server.py`，实现 `?count=1` / `?index=N` 协议），设备端 `source_http.c`（HTTP 取图）待实现；`menu.json` 中 URL 仍需替换 `REPLACE_ME`
 - 暂不支持 HTTPS（老固件 OpenSSL 限制；后续计划引入静态 libcurl）
 - `--no-framework` 退出后 framework 冷启动约 30-60s 才恢复界面（固件行为，退出时会显示等待提示）
 - `cover` 缩放模式为近似实现（等比适配 + 白底），真裁剪铺满待后续版本
