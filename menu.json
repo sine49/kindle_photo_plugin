@@ -1,0 +1,28 @@
+{
+    "items": [
+        {
+            "name": "启动相册-本地顺序",
+            "priority": 1,
+            "exitmenu": true,
+            "refresh": false,
+            "status": false,
+            "action": "./bin/photo-player.sh --source /mnt/us/photos --order seq --interval 600 --no-framework"
+        },
+        {
+            "name": "启动相册-本地随机",
+            "priority": 2,
+            "exitmenu": true,
+            "refresh": false,
+            "status": false,
+            "action": "./bin/photo-player.sh --source /mnt/us/photos --order random --interval 600 --no-framework"
+        },
+        {
+            "name": "启动相册-网络",
+            "priority": 3,
+            "exitmenu": true,
+            "refresh": false,
+            "status": false,
+            "action": "./bin/photo-player.sh --source http://REPLACE_ME:8080/photo --interval 600 --no-framework"
+        }
+    ]
+}

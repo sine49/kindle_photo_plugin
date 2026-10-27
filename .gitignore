@@ -1,0 +1,21 @@
+# Build artifacts
+build/
+bin/photo-player
+photo_plugins-release/
+
+# Runtime
+logs/
+*.log
+
+# Personal photos / test data
+photos/
+photos_resized/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
